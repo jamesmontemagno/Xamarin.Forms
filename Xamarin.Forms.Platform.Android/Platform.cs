@@ -323,7 +323,7 @@ namespace Xamarin.Forms.Platform.Android
 
 		internal static IVisualElementRenderer CreateRenderer(VisualElement element, Context context)
 		{
-			IVisualElementRenderer renderer = Registrar.Registered.GetHandlerForObject<IVisualElementRenderer>(element, context)
+			IVisualElementRenderer renderer = Registrar.Registered.GetHandlerForObject<IVisualElementRenderer>(element, (element as View)?.Visual, context)
 				?? new DefaultRenderer(context);
 			renderer.SetElement(element);
 
@@ -768,8 +768,8 @@ namespace Xamarin.Forms.Platform.Android
 			FastRenderers.AutomationPropertiesProvider.GetDrawerAccessibilityResources(_activity, CurrentMasterDetailPage, out int resourceIdOpen, out int resourceIdClose);
 #pragma warning disable 618 // Eventually we will need to determine how to handle the v7 ActionBarDrawerToggle for AppCompat
 			MasterDetailPageToggle = new ActionBarDrawerToggle(_activity, drawer, icon,
-			                                                   resourceIdOpen == 0 ? global::Android.Resource.String.Ok : resourceIdOpen,
-													  		   resourceIdClose == 0 ? global::Android.Resource.String.Ok : resourceIdClose);
+															   resourceIdOpen == 0 ? global::Android.Resource.String.Ok : resourceIdOpen,
+																 resourceIdClose == 0 ? global::Android.Resource.String.Ok : resourceIdClose);
 #pragma warning restore 618
 			MasterDetailPageToggle.SyncState();
 		}

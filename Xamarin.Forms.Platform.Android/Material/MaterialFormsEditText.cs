@@ -4,19 +4,19 @@ using Android.Graphics;
 using Android.Views;
 using Android.Widget;
 using Android.Support.V4.Graphics.Drawable;
+using Android.Support.Design.Widget;
 
-namespace Xamarin.Forms.Platform.Android
+namespace Xamarin.Forms.Platform.Android.Material
 {
-	public class FormsEditText : EditText, IDescendantFocusToggler
+	public class MaterialFormsEditText : TextInputEditText, IDescendantFocusToggler
 	{
 		DescendantFocusToggler _descendantFocusToggler;
 
-		public FormsEditText(Context context) : base(context)
+		public MaterialFormsEditText(Context context) : base(context)
 		{
 			DrawableCompat.Wrap(Background);
-
-			
 		}
+
 
 		bool IDescendantFocusToggler.RequestFocus(global::Android.Views.View control, Func<bool> baseRequestFocus)
 		{
