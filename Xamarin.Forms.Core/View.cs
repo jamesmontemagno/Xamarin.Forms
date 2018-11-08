@@ -29,6 +29,17 @@ namespace Xamarin.Forms
 			BindableProperty.Create("MarginLeft", typeof(double), typeof(View), default(double),
 									propertyChanged: OnMarginLeftPropertyChanged);
 
+
+		public static readonly BindableProperty VisualProperty =
+			BindableProperty.Create(nameof(Visual), typeof(IVisual), typeof(View), Forms.Visual.Default,
+									validateValue: (b, v) => v!= null);
+
+		public IVisual Visual
+		{
+			get { return (IVisual)GetValue(VisualProperty); }
+			set { SetValue(VisualProperty, value); }
+		}
+
 		static void OnMarginLeftPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			var margin = (Thickness)bindable.GetValue(MarginProperty);

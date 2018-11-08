@@ -273,6 +273,9 @@
     <Reference Include="Calabash">
       <HintPath>..\packages\Xamarin.TestCloud.Agent.0.21.7\lib\Xamarin.iOS\Calabash.dll</HintPath>
     </Reference>
+    <Reference Include="MaterialComponents">
+      <HintPath>..\packages\Xamarin.iOS.MaterialComponents.60.1.0\lib\Xamarin.iOS\MaterialComponents.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
