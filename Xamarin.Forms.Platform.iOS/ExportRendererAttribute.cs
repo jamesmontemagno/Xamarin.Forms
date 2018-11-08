@@ -10,7 +10,7 @@ namespace Xamarin.Forms
 	public sealed class ExportRendererAttribute : HandlerAttribute
 	{
 #if __MOBILE__
-		public ExportRendererAttribute(Type handler, Type target, UIUserInterfaceIdiom idiom) : base(handler, target)
+		public ExportRendererAttribute(Type handler, Type target, UIUserInterfaceIdiom idiom, Type[] supportedVisuals = null) : base(handler, target, supportedVisuals)
 		{
 			Idiomatic = true;
 			Idiom = idiom;
@@ -18,7 +18,7 @@ namespace Xamarin.Forms
 		internal UIUserInterfaceIdiom Idiom { get; }
 #endif
 
-		public ExportRendererAttribute(Type handler, Type target) : base(handler, target)
+		public ExportRendererAttribute(Type handler, Type target, Type[] supportedVisuals = null) : base(handler, target, supportedVisuals)
 		{
 			Idiomatic = false;
 		}

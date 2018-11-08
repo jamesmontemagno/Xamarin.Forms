@@ -21,7 +21,7 @@ using AColor = Android.Graphics.Color;
 
 namespace Xamarin.Forms.Platform.Android.AppCompat
 {
-	public class TabbedPageRenderer : VisualElementRenderer<TabbedPage>, TabLayout.IOnTabSelectedListener, ViewPager.IOnPageChangeListener, IManageFragments, BottomNavigationView.IOnNavigationItemSelectedListener
+	public class TabbedPageRenderer : VisualElementRenderer<TabbedPage>, /*TabLayout.IOnTabSelectedListener,*/ ViewPager.IOnPageChangeListener, IManageFragments, BottomNavigationView.IOnNavigationItemSelectedListener
 	{
 		Drawable _backgroundDrawable;
 		Drawable _wrappedBackgroundDrawable;
@@ -109,26 +109,30 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 				_bottomNavigationView.SelectedItemId = position;
 		}
 
-		void TabLayout.IOnTabSelectedListener.OnTabReselected(TabLayout.Tab tab)
+		/*void TabLayout.IBaseOnTabSelectedListener.OnTabReselected(Java.Lang.Object tab)
 		{
 		}
 
-		void TabLayout.IOnTabSelectedListener.OnTabSelected(TabLayout.Tab tab)
+		void TabLayout.IBaseOnTabSelectedListener.OnTabSelected(Java.Lang.Object obj)
 		{
 			if (Element == null)
 				return;
 
-			int selectedIndex = tab.Position;
-			if (Element.Children.Count > selectedIndex && selectedIndex >= 0)
-				Element.CurrentPage = Element.Children[selectedIndex];
+			if (obj is TabLayout.Tab tab)
+			{
+				int selectedIndex = tab.Position;
+				if (Element.Children.Count > selectedIndex && selectedIndex >= 0)
+					Element.CurrentPage = Element.Children[selectedIndex];
 
-			SetIconColorFilter(tab, true);
+				SetIconColorFilter(tab, true);
+			}
 		}
 
-		void TabLayout.IOnTabSelectedListener.OnTabUnselected(TabLayout.Tab tab)
+		void TabLayout.IBaseOnTabSelectedListener.OnTabUnselected(Java.Lang.Object obj)
 		{
-			SetIconColorFilter(tab, false);
-		}
+			if (obj is TabLayout.Tab tab)
+				SetIconColorFilter(tab, false);
+		}*/
 
 		protected override void Dispose(bool disposing)
 		{
@@ -437,7 +441,7 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 				{
 					tabs.SetupWithViewPager(pager);
 					UpdateTabIcons();
-					tabs.AddOnTabSelectedListener(this);
+					//tabs.AddOnTabSelectedListener(this);
 				}
 
 				UpdateIgnoreContainerAreas();

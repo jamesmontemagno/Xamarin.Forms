@@ -6,20 +6,74 @@ using Xamarin.Forms.Core.UnitTests;
 
 [assembly: TestHandler (typeof (Button), typeof (ButtonTarget))]
 [assembly: TestHandler (typeof (Slider), typeof (SliderTarget))]
-
+[assembly: TestHandler(typeof(Button), typeof(VisualButtonTarget), new[] { typeof(VisualMarker) })]
+[assembly: TestHandler(typeof(Slider), typeof(VisualSliderTarget), new[] { typeof(VisualMarker) })]
 namespace Xamarin.Forms.Core.UnitTests
 {
 	internal class TestHandlerAttribute : HandlerAttribute
 	{
-		public TestHandlerAttribute (Type handler, Type target) : base (handler, target)
+		public TestHandlerAttribute (Type handler, Type target, Type[] supportedVisuals = null) : base (handler, target, supportedVisuals)
 		{
 			
 		}
 	}
 
+	public class VisualMarker : IVisual { }
+
+	internal class VisualButtonTarget : IRegisterable { }
+
+	internal class VisualSliderTarget : IRegisterable { }
+
 	internal class ButtonTarget : IRegisterable {}
 
 	internal class SliderTarget : IRegisterable {}
+
+
+	[TestFixture]
+	public class VisualRegistrarTests : BaseTestFixture
+	{
+		[SetUp]
+		public override void Setup()
+		{
+			base.Setup();
+			Device.PlatformServices = new MockPlatformServices();
+			Internals.Registrar.RegisterAll(new[] {
+				typeof (TestHandlerAttribute)
+			});
+
+		}
+
+		[TearDown]
+		public override void TearDown()
+		{
+			base.TearDown();
+			Device.PlatformServices = null;
+		}
+
+		[Test]
+		public void GetButtonHandler()
+		{
+			var buttonTarget = Internals.Registrar.Registered.GetHandler(typeof(Button), typeof(VisualMarker));
+			Assert.IsNotNull(buttonTarget);
+			Assert.That(buttonTarget, Is.InstanceOf<VisualButtonTarget>());
+
+			buttonTarget = Internals.Registrar.Registered.GetHandler(typeof(Button));
+			Assert.IsNotNull(buttonTarget);
+			Assert.That(buttonTarget, Is.InstanceOf<ButtonTarget>());
+		}
+
+		[Test]
+		public void GetSliderHandler()
+		{
+			var sliderTarget = Internals.Registrar.Registered.GetHandler(typeof(Slider), typeof(VisualMarker));
+			Assert.IsNotNull(sliderTarget);
+			Assert.That(sliderTarget, Is.InstanceOf<VisualSliderTarget>());
+
+			sliderTarget = Internals.Registrar.Registered.GetHandler<SliderTarget>(typeof(Slider));
+			Assert.IsNotNull(sliderTarget);
+			Assert.That(sliderTarget, Is.InstanceOf<SliderTarget>());
+		}
+	}
 
 	[TestFixture]
 	public class RegistrarTests : BaseTestFixture
