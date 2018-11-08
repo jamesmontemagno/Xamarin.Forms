@@ -169,7 +169,7 @@ namespace Xamarin.Forms.Platform.iOS.Material
 
 		void UpdateFont()
 		{
-			Control.TitleLabel.Font = Element.ToUIFont();
+			Control.SetTitleFont(Element.ToUIFont(), UIControlState.Normal);
 		}
 
 		async void UpdateImage()
