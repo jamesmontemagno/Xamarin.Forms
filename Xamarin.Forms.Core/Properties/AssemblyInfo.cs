@@ -105,4 +105,4 @@ using Xamarin.Forms.StyleSheets;
 [assembly: StyleProperty("-xf-spacing", typeof(StackLayout), nameof(StackLayout.SpacingProperty))]
 [assembly: StyleProperty("-xf-thumb-color", typeof(Slider), nameof(Slider.ThumbColorProperty))]
 [assembly: StyleProperty("-xf-vertical-scroll-bar-visibility", typeof(ScrollView), nameof(ScrollView.VerticalScrollBarVisibilityProperty))]
-[assembly: StyleProperty("-xf-visual", typeof(View), nameof(View.VisualProperty))]
+[assembly: StyleProperty("-xf-visual", typeof(VisualElement), nameof(VisualElement.VisualProperty))]

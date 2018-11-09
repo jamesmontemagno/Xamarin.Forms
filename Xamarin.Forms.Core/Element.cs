@@ -339,7 +339,7 @@ namespace Xamarin.Forms
 			if (Platform != null)
 				child.Platform = Platform;
 
-			child.ApplyBindings(skipBindingContext: false, fromBindingContextChanged:true);
+			child.ApplyBindings(skipBindingContext: false, fromBindingContextChanged: true);
 
 			ChildAdded?.Invoke(this, new ElementEventArgs(child));
 
@@ -496,6 +496,22 @@ namespace Xamarin.Forms
 			}
 		}
 
+		internal static void SetVisualfromParent(Element child)
+		{
+			IVisualController controller = child as IVisualController;
+			if (controller == null)
+				return;
+
+			if (controller.Visual != Visual.MatchParent)
+			{
+				controller.EffectiveVisual = controller.Visual;
+				return;
+			}
+
+			if (child.Parent is IVisualController parentView)
+				controller.EffectiveVisual = parentView.EffectiveVisual;
+		}
+
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public event EventHandler PlatformSet;
 
@@ -598,7 +614,8 @@ namespace Xamarin.Forms
 		internal INameScope GetNameScope()
 		{
 			var element = this;
-			do {
+			do
+			{
 				var ns = NameScope.GetNameScope(element);
 				if (ns != null)
 					return ns;
