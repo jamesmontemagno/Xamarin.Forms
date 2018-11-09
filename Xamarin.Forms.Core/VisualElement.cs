@@ -5,12 +5,8 @@ using Xamarin.Forms.Internals;
 
 namespace Xamarin.Forms
 {
-	public partial class VisualElement : Element, IAnimatable, IVisualElementController, IResourcesProvider, IStyleElement, IFlowDirectionController
+	public partial class VisualElement : NavigableElement, IAnimatable, IStyleElement, IVisualElementController, IResourcesProvider, IFlowDirectionController
 	{
-		internal static readonly BindablePropertyKey NavigationPropertyKey = BindableProperty.CreateReadOnly("Navigation", typeof(INavigation), typeof(VisualElement), default(INavigation));
-
-		public static readonly BindableProperty NavigationProperty = NavigationPropertyKey.BindableProperty;
-
 		public static readonly BindableProperty InputTransparentProperty = BindableProperty.Create("InputTransparent", typeof(bool), typeof(VisualElement), default(bool));
 
 		public static readonly BindableProperty IsEnabledProperty = BindableProperty.Create("IsEnabled", typeof(bool),
@@ -140,9 +136,7 @@ namespace Xamarin.Forms
 
 		public static readonly BindableProperty TriggersProperty = TriggersPropertyKey.BindableProperty;
 
-		public static readonly BindableProperty StyleProperty = BindableProperty.Create("Style", typeof(Style), typeof(VisualElement), default(Style),
-			propertyChanged: (bindable, oldvalue, newvalue) => ((VisualElement)bindable)._mergedStyle.Style = (Style)newvalue);
-
+		
 		public static readonly BindableProperty WidthRequestProperty = BindableProperty.Create("WidthRequest", typeof(double), typeof(VisualElement), -1d, propertyChanged: OnRequestChanged);
 
 		public static readonly BindableProperty HeightRequestProperty = BindableProperty.Create("HeightRequest", typeof(double), typeof(VisualElement), -1d, propertyChanged: OnRequestChanged);
@@ -203,7 +197,7 @@ namespace Xamarin.Forms
 			{
 				if (value == _effectiveFlowDirection)
 					return;
-
+				
 				_effectiveFlowDirection = value;
 				InvalidateMeasureInternal(InvalidationTrigger.Undefined);
 				OnPropertyChanged(FlowDirectionProperty.PropertyName);
@@ -214,7 +208,7 @@ namespace Xamarin.Forms
 
 		readonly Dictionary<Size, SizeRequest> _measureCache = new Dictionary<Size, SizeRequest>();
 
-		internal readonly MergedStyle _mergedStyle;
+		
 
 		int _batched;
 		LayoutConstraint _computedConstraint;
@@ -237,8 +231,7 @@ namespace Xamarin.Forms
 
 		internal VisualElement()
 		{
-			Navigation = new NavigationProxy();
-			_mergedStyle = new MergedStyle(GetType(), this);
+			
 		}
 
 		public double AnchorX
@@ -325,12 +318,6 @@ namespace Xamarin.Forms
 		{
 			get { return (double)GetValue(MinimumWidthRequestProperty); }
 			set { SetValue(MinimumWidthRequestProperty, value); }
-		}
-
-		public INavigation Navigation
-		{
-			get { return (INavigation)GetValue(NavigationProperty); }
-			internal set { SetValue(NavigationPropertyKey, value); }
 		}
 
 		public double Opacity
@@ -536,12 +523,6 @@ namespace Xamarin.Forms
 
 				OnIsPlatformEnabledChanged();
 			}
-		}
-
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public NavigationProxy NavigationProxy
-		{
-			get { return Navigation as NavigationProxy; }
 		}
 
 		internal LayoutConstraint SelfConstraint
@@ -766,18 +747,7 @@ namespace Xamarin.Forms
 
 		protected override void OnParentSet()
 		{
-#pragma warning disable 0618 // retain until ParentView removed
 			base.OnParentSet();
-
-			if (ParentView != null)
-			{
-				NavigationProxy.Inner = ParentView.NavigationProxy;
-			}
-			else
-			{
-				NavigationProxy.Inner = null;
-			}
-#pragma warning restore 0618
 
 			FlowController.NotifyFlowDirectionChanged();
 		}
@@ -1014,12 +984,10 @@ namespace Xamarin.Forms
 		{
 			SetFlowDirectionFromParent(this);
 
-			foreach (var element in LogicalChildren)
+			for (int i = 0; i < LogicalChildren.Count; i++)
 			{
-				var view = element as IFlowDirectionController;
-				if (view == null)
-					continue;
-				view.NotifyFlowDirectionChanged();
+				if (LogicalChildren[i] is IFlowDirectionController view)
+					view.NotifyFlowDirectionChanged();
 			}
 		}
 

@@ -353,7 +353,8 @@ namespace Xamarin.Forms.Xaml
 				});
 			}
 
-			lookupNames.Add(elementName + "Extension");
+			if (elementName != "DataTemplate")
+				lookupNames.Add(elementName + "Extension");
 			lookupNames.Add(elementName);
 
 			for (var i = 0; i < lookupNames.Count; i++)

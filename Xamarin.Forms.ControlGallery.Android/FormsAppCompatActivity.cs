@@ -32,6 +32,8 @@ namespace Xamarin.Forms.ControlGallery.Android
 	{
 		protected override void OnCreate(Bundle bundle)
 		{
+			Window.AddFlags(global::Android.Views.WindowManagerFlags.TranslucentStatus);
+
 			ToolbarResource = Resource.Layout.Toolbar;
 			TabLayoutResource = Resource.Layout.Tabbar;
 
@@ -40,6 +42,7 @@ namespace Xamarin.Forms.ControlGallery.Android
 
 			base.OnCreate(bundle);
 
+			Forms.SetFlags("FastRenderers_Experimental");
 #if TEST_EXPERIMENTAL_RENDERERS
 			Forms.SetFlags("FastRenderers_Experimental");
 #else
@@ -79,6 +82,8 @@ namespace Xamarin.Forms.ControlGallery.Android
 			MessagingCenter.Subscribe<AndroidStatusBarColor>(this, AndroidStatusBarColor.Message, color => SetStatusBarColor(global::Android.Graphics.Color.Red));
 
 			SetUpForceRestartTest();
+
+			SetStatusBarColor(new global::Android.Graphics.Color(0, 0, 0, 25));
 
 			LoadApplication(_app);
 			if (Forms.Flags.Contains("FastRenderers_Experimental"))
